@@ -8,7 +8,8 @@ Data Generation script: `generate_data.py`
 
 ## Inference
 
-Longformer model fine tuned on the data: [download](https://huggingface.co/datasets/covid_qa_deepset).  
+Longformer model fine tuned on the data: [download](https://drive.google.com/drive/folders/1g-bZ2eiLZv2vI1g-oQ9eTm2E7uhatYff?usp=sharing).  
+Make sure the model checkpoints are in `covid_qa_longformer/`.  
 Scripts on `longformer_inference.py`
 Example:
  ```
