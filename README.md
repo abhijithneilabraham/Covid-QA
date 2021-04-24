@@ -6,13 +6,16 @@ Fine tuned models for question answering on Covid-19 data.
 
 ## Dataset
 
+```
+cd longformer_qa
+```
 Covid 19 QA data obtained from transformers: [covid QA deepset](https://huggingface.co/datasets/covid_qa_deepset).  
 Data Generation script: `generate_data.py`
 
 ## Inference
 
 Longformer model fine tuned on the data: [download](https://drive.google.com/file/d/1z4XnRyb6u4fi86vwCm6AlkpZnW4PeE65/view?usp=sharing).  
-download and unzip.   
+download and unzip inside `longformer_qa/`.   
 Scripts on `longformer_inference.py`
 Example:
  ```
