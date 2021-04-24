@@ -1,2 +1,4 @@
 # Covid-QA
-covid qa datasets and fine tuned models
+Fine tuned models for question answering on Covid-19 data.
+
+
