@@ -1,5 +1,8 @@
 # Covid-QA
-Fine tuned models for question answering on Covid-19 data.
+Fine tuned models for question answering on Covid-19 data.   
+
+## Dependencies
+`pip install -r requirements.txt`
 
 ## Dataset
 
