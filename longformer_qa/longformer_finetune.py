@@ -10,7 +10,6 @@ import pandas as pd
 train=pd.read_json("train_deepset.jsonl",lines=True)
 train_split=int(len(train)*0.9)
 train_contexts, train_questions, train_answers = train["context"][:train_split].tolist(),train["question"][:train_split].tolist(),train["answers"][:train_split].tolist()
-val_contexts, val_questions, val_answers =train["context"][train_split:].tolist(), train["question"][train_split:].tolist(),train["answers"][train_split:].tolist()
 
 def add_end_idx(answers, contexts):
     a=[]
@@ -23,13 +22,12 @@ def add_end_idx(answers, contexts):
         a.append(answer)
     return a
 train_answers=add_end_idx(train_answers, train_contexts)
-val_answers=add_end_idx(val_answers, val_contexts)
 
-from transformers import ElectraTokenizerFast
-tokenizer = ElectraTokenizerFast.from_pretrained('google/electra-base-discriminator')
+
+from transformers import LongformerTokenizerFast
+tokenizer = LongformerTokenizerFast.from_pretrained('valhalla/longformer-base-4096-finetuned-squadv1')
 
 train_encodings = tokenizer(train_contexts, train_questions, truncation=True, padding=True)
-val_encodings = tokenizer(val_contexts, val_questions, truncation=True, padding=True)
 
 def add_token_positions(encodings, answers):
     start_positions = []
@@ -48,7 +46,6 @@ def add_token_positions(encodings, answers):
     return encodings
 
 train_encodings=add_token_positions(train_encodings, train_answers)
-val_encodings=add_token_positions(val_encodings, val_answers)
 
 import torch
 
@@ -63,10 +60,10 @@ class SquadDataset(torch.utils.data.Dataset):
         return len(self.encodings.input_ids)
 
 train_dataset = SquadDataset(train_encodings)
-val_dataset = SquadDataset(val_encodings)
 
-from transformers import ElectraForQuestionAnswering
-model = ElectraForQuestionAnswering.from_pretrained("google/electra-base-discriminator")
+
+from transformers import LongformerForQuestionAnswering
+model = LongformerForQuestionAnswering.from_pretrained("valhalla/longformer-base-4096-finetuned-squadv1")
 
 from torch.utils.data import DataLoader
 from transformers import AdamW
@@ -76,12 +73,15 @@ device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cp
 model.to(device)
 model.train()
 
-train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True)
+train_loader = DataLoader(train_dataset, batch_size=2, shuffle=True)
 
 optim = AdamW(model.parameters(), lr=5e-5)
 
 for epoch in range(3):
+    c=0
     for batch in train_loader:
+        c+=1
+        print(c,"th batch",epoch+1," epoch",len(train_loader)," total length")
         optim.zero_grad()
         input_ids = batch['input_ids'].to(device)
         attention_mask = batch['attention_mask'].to(device)
@@ -91,6 +91,6 @@ for epoch in range(3):
         loss = outputs[0]
         loss.backward()
         optim.step()
-model.save_pretrained("covid_qa")
+model.save_pretrained("covid_qa_longformer")
 
-model.eval()
+
