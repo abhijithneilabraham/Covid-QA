@@ -4,11 +4,13 @@ Fine tuned models for question answering on Covid-19 data.
 ## Dependencies
 `pip install -r requirements.txt`
 
-## Dataset
-
+## Getting Started
 ```
 cd longformer_qa
 ```
+
+## Dataset
+
 Covid 19 QA data obtained from transformers: [covid QA deepset](https://huggingface.co/datasets/covid_qa_deepset).  
 Data Generation script: `generate_data.py`
 
