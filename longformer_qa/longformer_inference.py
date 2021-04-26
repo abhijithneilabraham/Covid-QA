@@ -2,7 +2,7 @@ from transformers import LongformerTokenizerFast
 import torch
 from transformers import LongformerForQuestionAnswering
 tokenizer = LongformerTokenizerFast.from_pretrained('valhalla/longformer-base-4096-finetuned-squadv1')
-model = LongformerForQuestionAnswering.from_pretrained("covid_qa_longformer")
+model = LongformerForQuestionAnswering.from_pretrained("longformer_covid_qa")
 
 def qa(question,text):
     encoding = tokenizer.encode_plus(question, text, return_tensors="pt")

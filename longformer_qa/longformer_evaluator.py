@@ -1,8 +1,8 @@
 import pandas as pd
 from longformer_inference import qa
-train=pd.read_json("train_deepset.jsonl",lines=True)
-train_split=int(len(train)*0.9)
-val_contexts, val_questions, val_answers =train["context"][train_split:].tolist(), train["question"][train_split:].tolist(),train["answers"][train_split:].tolist()
+from datasets import load_dataset
+val = load_dataset("covid_qa_deepset",split='train[90%:]') 
+val_contexts, val_questions, val_answers =val["context"], val["question"],val["answers"]
 from collections import Counter
 import string
 import re
@@ -61,12 +61,15 @@ for c,q,a in zip(val_contexts, val_questions, val_answers):
             em_score=0
         f1_total+=f1
         em_total+=em_score
+        print(f1)
+        print(em)
         count+=1
+        print(count)
     except:
         continue
 
-df=pd.DataFrame({"predicted":p,"actual":ans})
-df.to_csv("compare_predictions.csv",sep="|") #to compare the answers
+df=pd.DataFrame({"pred":p,"actual":ans})
+df.to_csv("predvsact.csv",sep="|")
 
 f1_total=f1_total/count
 em_total=em_total/count
@@ -74,6 +77,7 @@ em_total=em_total/count
 file1 = open("scores.txt","w")
 L = [str(f1_total*100),str(em_total*100)] 
   
+# \n is placed to indicate EOL (End of Line)
 file1.write("F1 and EM scores \n")
 file1.write(L[0]+"\n")
 file1.write(L[1])
