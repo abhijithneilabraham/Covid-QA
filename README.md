@@ -1,6 +1,10 @@
 # Covid-QA
 Fine tuned models for question answering on Covid-19 data.   
 
+# Hosted Inference
+
+This model has been contributed to huggingface.[Click here](https://huggingface.co/abhijithneilabraham/longformer_covid_qa) to see the model in action!   
+
 ## Dependencies
 `pip install -r requirements.txt`
 
